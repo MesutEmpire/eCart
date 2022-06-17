@@ -115,7 +115,7 @@ export default defineComponent({
     const submitData = async ()=>{
       try{
         await store.dispatch('UserAuth/signUp',form)
-        // router.push('/')
+        router.push('/')
       }
       catch(err:any){
         error.value = err.message
