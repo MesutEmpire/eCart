@@ -6,8 +6,8 @@
         <img src="../assets/logo.png" class="mr-3 h-14 sm:h-16" alt="Flowbite Logo">
         <span class="self-center text-3xl font-semibold whitespace-nowrap dark:text-white">eCart</span>
       </router-link>
-      <div v-if="authIsReady" class="flex items-center md:order-2">
-        <div v-if="!user">
+      <div v-if="store.getAuthIsReady" class="flex items-center md:order-2">
+        <div v-if="!store.getUser">
 
           <router-link to="/login">
             <button type="submit"
@@ -16,10 +16,10 @@
           </router-link>
         </div>
 
-        <div v-if="user">
+        <div v-if="store.getUser">
           Logged In as :
-          {{user.email}}
-          <button type="submit" @click="logOut"
+          {{store.getUser.email}}
+          <button type="submit" @click="store.logOut()"
                   class="text-white bg-pink-600 hover:bg-pink-700 focus:ring-4 focus:outline-none focus:ring-pink-500 font-medium rounded-lg text-sm lg:text-base w-full sm:w-auto px-5 py-2.5 text-center ">Log Out</button>
 
         </div>
@@ -85,23 +85,15 @@
 
 <script lang="ts">
 import {computed, defineComponent} from "vue";
-import {useStore} from "vuex";
+import {UserAuthStore} from "@/stores/UserAuth";
 
 export default defineComponent( {
   name: "NavBar",
   setup(){
-    const store = useStore()
-
-
-    const logOut = ()=>{
-      store.dispatch('UserAuth/logOut')
-    }
-
+    const store = UserAuthStore()
+    store.authState()
     return{
-      logOut,
       store,
-      user:computed(()=> store.getters['UserAuth/getUser']),
-      authIsReady : computed(()=> store.getters['UserAuth/getAuthIsReady'])
     }
   }
 })

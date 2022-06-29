@@ -1,6 +1,7 @@
 <template>
   <NavBar></NavBar>
   <LandingPage></LandingPage>
+
 </template>
 
 <script lang="ts">
@@ -10,9 +11,11 @@ import NavBar from "@/components/NavBar.vue";
 
 
 
+
 export default defineComponent({
   name: 'HomeView',
   components: {
+
     NavBar,
     LandingPage
   },

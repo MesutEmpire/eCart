@@ -2,10 +2,13 @@
 
 
   <div class="flex justify-center items-center  bg-white p-8 lg:p-16">
+
     <div class="grid  p-4">
+
       <div
           class=" rounded-lg border border-gray-200 shadow-md p-3 sm:p-8 lg:p-12"
       >
+
         <div class="my-7 mb-9">
           <p class="mb-1 block text-xl lg:text-2xl font-normal text-gray-400">
             Welcome back!
@@ -15,12 +18,12 @@
           </h1>
         </div>
 
-        <form @submit.prevent="onSubmit">
+        <form @submit.prevent="store.logIn()">
           <div class="relative mb-6">
             <input
                 type="email"
                 id="email"
-                v-model="form.email"
+                v-model="store.signInForm.email"
 
                 class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
@@ -39,7 +42,7 @@
             <input
                 type="password"
                 id="password"
-                v-model="form.password"
+                v-model="store.signInForm.password"
                 class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
                 required
@@ -77,7 +80,7 @@
           </div>
           <button
               type="submit"
-              @click="logInUser"
+
               class="text-white mb-4 bg-pink-600 hover:bg-pink-700 focus:ring-4 focus:outline-none focus:ring-pink-500 font-medium rounded-lg text-sm lg:text-base w-full sm:w-auto px-5 py-2.5 text-center"
           >
             Sign in
@@ -111,24 +114,16 @@
         </form>
       </div>
     </div>
-<!--      <div class="md:col-span-2 items-center rounded-lg">-->
-<!--        <img-->
-<!--            src="../assets/logIn-2.jpg.jpg"-->
-<!--            class="h-full w-96 object-contain md:object-scale-down"-->
-<!--            alt="food"-->
-<!--        />-->
-<!--      </div>-->
-
   </div>
-  <div v-if="error">
-    {{error}}
+  <div v-if="store.getAuthError">
+    {{store.getAuthError}}
   </div>
 
 </template>
 
 <script lang="ts">
-import {defineComponent, reactive, ref} from "vue";
-import {useStore} from "vuex";
+import {computed, defineComponent, reactive, ref} from "vue";
+import {UserAuthStore} from "@/stores/UserAuth";
 import router from "@/router";
 
 
@@ -136,30 +131,8 @@ import router from "@/router";
 export default defineComponent({
   name: "LogIn",
   setup(){
-    const form = reactive({
-      email: '',
-      password: ''
-    })
-    const error = ref(null)
-
-    const store = useStore()
-
-    const logInUser =  ()=>{
-      try {
-        store.dispatch('UserAuth/logIn', form)
-        router.push('/')
-      }
-      catch(err:any){
-        error.value = err.message
-        console.log(error.value)
-
-      }
-    }
-
+    const store = UserAuthStore()
     return {
-      form,
-      logInUser,
-      error,
       store
     }
   }
